@@ -3,6 +3,6 @@ const router = express.Router();
 
 const { getBookmark } = require('./modules')
 
-router.get('/Bookmark', (req, res)=> getBookmark(req, res));
+router.get('/bookmark', (req, res)=> getBookmark(req, res));
 
 module.exports = router;
