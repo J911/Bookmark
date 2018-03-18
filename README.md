@@ -36,6 +36,9 @@
         siteDescription,
         type
     }
+    type: 0 //public
+            1 // private
+            3 // delete
     // userId는 세션을 통해 등록
 ```
 
@@ -77,6 +80,16 @@
 
 ```
     body { 
+        bid
+    }
+```
+
+## 북마크 열람 카운트
+
+- get /book/${bid}
+
+```
+    parms {
         bid
     }
 ```
