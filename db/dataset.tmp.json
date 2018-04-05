@@ -1,0 +1,23 @@
+{
+    "members": [
+        {
+            "idx": 1,
+            "id": "J911",
+            "pw": "1234"
+        },
+        {
+            "idx": 2,
+            "id": "jay",
+            "pw": "1234"
+        }
+    ],
+    "bookmark": [
+        {
+            "idx": 1,
+            "user_idx": 1,
+            "title": "J911의 깃허브",
+            "url": "https://github.j911.me",
+            "type": "public"
+        }
+    ]
+}
