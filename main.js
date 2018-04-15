@@ -5,8 +5,6 @@ const flash = require('connect-flash');
 const cookieSession = require('./src/cookie-session');
 require('dotenv').config();
 
-const conn = require('./src/mysql');
-
 const PORT =  process.env.PORT || 3000;
 
 const app = express();
