@@ -1,24 +1,23 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const flash = require('connect-flash');
+const cookieSession = require('./src/cookie-session');
+require('dotenv').config();
+
+const PORT =  process.env.PORT || 3000;
 
 const app = express();
 
-const api = require('./api/index');
+const api = require('./src').api;
 
+app.use(cookieSession);
+app.use(flash());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-const session = require('express-session');
-
-app.use(session({
- secret: '!@#SECURE@#$',
- resave: false,
- saveUninitialized: true
-}));
-
 app.use('/v1', api);
 
-app.listen(3000);
+app.listen(PORT);
   
