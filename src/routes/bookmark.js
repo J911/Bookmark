@@ -25,6 +25,11 @@ router.get('/search', (req, res) => {
     })
 });
 
+router.post('/register', (req, res, next) => {
+    if(req.session.user == undefined) res.status(403)
+    else next();
+})
+
 router.post('/register', (req, res) => {
     const bookmarkTitle = req.body.title;
     const bookmarkUrl = req.body.url;
@@ -35,5 +40,5 @@ router.post('/register', (req, res) => {
             state: 'success regist'
           });
     });
-  });
+});
 module.exports = router
