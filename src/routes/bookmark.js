@@ -1,44 +1,11 @@
-const mysql = require('../mysql/index')
+const express = require('express')
+const router = express.Router()
 
-const express = require('express');
-const router = express.Router();
+const bookmark = require('./bookmark.ctrl')
 
-router.get('/', (req, res) => {
-    const sql = `select * from bookmark`;
-    mysql.query(sql, (err, bookmarks) => {
-        if(err) return res.status(500).end()
-        res.json(
-            bookmarks
-        )
-    })
-});
+router.get('/', bookmark.getBookmark)
+router.get('/search', bookmark.searchBookmark)
 
-router.get('/search', (req, res) => {
-    const keyword = req.query.keyword 
-    const sql = `select * from bookmark where title like '%${keyword}%'`;
-    console.log(sql)
-    mysql.query(sql, (err, bookmarks) => {
-        if(err) return res.status(500).end()
-        res.json(
-            bookmarks
-        )
-    })
-});
-
-router.post('/', (req, res, next) => {
-    if(req.session.user == undefined) res.status(403)
-    else next();
-})
-
-router.post('/', (req, res) => {
-    const bookmarkTitle = req.body.title;
-    const bookmarkUrl = req.body.url;
-    const sql = `insert into bookmark(user_idx ,title, url, type) values('${req.session.user.idx}','${bookmarkTitle}','${bookmarkUrl}', '0')`;
-    mysql.query(sql, (err, users) => {
-        if(err) return res.status(500).end()
-        return res.json({
-            state: 'success regist'
-          });
-    });
-});
+router.post('/', (req, res, next) => req.session.user == undefined ? res.status(403) : next())
+router.post('/',bookmark.registBookmark)
 module.exports = router
