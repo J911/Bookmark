@@ -4,21 +4,36 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    const query = req.query.query; //??
-    const siteName = req.query.siteName;
-    const siteDomain = req.query.siteDomain;
-    const siteDescription = req.query.siteDescription;
-    const type = req.query.type;
-    const sql = '';
-
-    if (query != undefined) // 북마크 리스트 중복 확인
-        if(serchCtrl(req.query.user_id)) // 본인의 북마크 리스트를 통해서 중복으로 등록되는것을 확인하고자함.. 그래서 searchCtrl를 통해서 확인한 리턴 값을 통해 알아내려고 함..
-            sql = "INSERT INTO 'bookmark' VALUES ('%${siteName}%', '%${siteDomain}%', '%${siteDescription}%', '%${type}%')"
-        else
-            connection.
-    else
-
+    const sql = `select * from bookmark where type = 0`;
+    mysql.query(sql, (err, bookmarks) => {
+        if(err) return res.status(500).end()
+        res.json(
+            bookmarks
+        )
+    })
 });
 
+router.get('/search', (req, res) => {
+    const keyword = req.query.keyword 
+    const sql = `select * from bookmark where type = 0 and title like '%${keyword}%'`;
+    console.log(sql)
+    mysql.query(sql, (err, bookmarks) => {
+        if(err) return res.status(500).end()
+        res.json(
+            bookmarks
+        )
+    })
+});
 
-module.exports = router;
+router.post('/register', (req, res) => {
+    const bookmarkTitle = req.body.title;
+    const bookmarkUrl = req.body.url;
+    const sql = `insert into bookmark(user_idx ,title, url, type) values('${req.session.user.idx}','${bookmarkTitle}','${bookmarkUrl}', '0')`;
+    mysql.query(sql, (err, users) => {
+        if(err) return res.status(500).end()
+        return res.json({
+            state: 'success regist'
+          });
+    });
+  });
+module.exports = router

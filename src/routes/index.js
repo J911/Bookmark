@@ -6,6 +6,5 @@ const user = require('./user')
 
 router.use('/auth', auth)
 router.use('/bookmark', bookmark)
-router.use('/user', user)
 
 module.exports = router

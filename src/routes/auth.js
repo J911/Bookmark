@@ -8,34 +8,40 @@ const auth = require('./auth')
 router.post('/login', (req, res)=>{
     const userId = req.body.user_id;
     const sql = `SELECT * FROM members WHERE user_id = '${userId}'`;
-    mysql.connection.query(sql, (err, users)=>{
-      if(!users[0]) return res.status(404);
+    mysql.query(sql, (err, users)=>{
+      if(!users[0]) return res.status(404).end();
       if(users[0].user_pw == req.body.user_pw){
         req.session.user = {
           idx: users[0].idx,
           user_id: users[0].user_id
         };
-        res.end();
+        return res.json({
+          state: 'success login'
+        });
       }
     });
 });
-router.post('/join', (req, res)=>{        //TODO err코드 수정(UserLogin과 비슷하게)
+router.post('/join', (req, res)=>{ 
     const userId = req.body.user_id;
     const userPw = req.body.user_pw;
-    const sql = `insert into members(user_id, user_pw) values('${userId}','${userPw}')`;
-    mysql.connection.query(sql,(err, users)=>{
-      if(err) throw err;
-      return res
+
+    const sql = `SELECT * FROM members WHERE user_id = '${userId}'`;
+    mysql.query(sql, (err, users)=>{
+      if(users[0]) return res.status(409).end(); // conflict
+      const sql = `insert into members(user_id, user_pw) values('${userId}','${userPw}')`;
+      mysql.query(sql,(err, users)=>{
+        if(err) res.status(500).end()
+        return res.json({
+          state: 'success join'
+        });
+      });
     });
 });
 
-module.exports = router;
+router.get('/logout', (req, res) => {
+  req.session = null;
+  res.clearCookie('sid');
+  res.redirect('/');
+});
 
-// const userSearch = (req, res)=>{      //TODO /get요청 수정, err코드 수정(UserLogin과 비슷하게)
-//   const userId = req.body.user_id;
-//   const sql = `SELECT user_id FROM members WHERE user_id = '${userId}'`;
-//   mysql.connection(query(sql,(err, users)=>{
-//     if(err) throw err;
-//     return users;
-//   }));
-// };
+module.exports = router;
