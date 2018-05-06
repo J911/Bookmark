@@ -25,12 +25,12 @@ router.get('/search', (req, res) => {
     })
 });
 
-router.post('/register', (req, res, next) => {
+router.post('/', (req, res, next) => {
     if(req.session.user == undefined) res.status(403)
     else next();
 })
 
-router.post('/register', (req, res) => {
+router.post('/', (req, res) => {
     const bookmarkTitle = req.body.title;
     const bookmarkUrl = req.body.url;
     const sql = `insert into bookmark(user_idx ,title, url, type) values('${req.session.user.idx}','${bookmarkTitle}','${bookmarkUrl}', '0')`;
