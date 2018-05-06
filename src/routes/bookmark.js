@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    const sql = `select * from bookmark where type = 0`;
+    const sql = `select * from bookmark`;
     mysql.query(sql, (err, bookmarks) => {
         if(err) return res.status(500).end()
         res.json(
@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
 
 router.get('/search', (req, res) => {
     const keyword = req.query.keyword 
-    const sql = `select * from bookmark where type = 0 and title like '%${keyword}%'`;
+    const sql = `select * from bookmark where title like '%${keyword}%'`;
     console.log(sql)
     mysql.query(sql, (err, bookmarks) => {
         if(err) return res.status(500).end()
