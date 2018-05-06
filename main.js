@@ -9,7 +9,7 @@ const PORT =  process.env.PORT || 3000;
 
 const app = express();
 
-const api = require('./src').api;
+const router = require('./src/routes')
 
 app.use(cookieSession);
 app.use(flash());
@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/v1', api);
+app.use('/', router);
 
 app.listen(PORT);
   
